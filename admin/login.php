@@ -1,88 +1,104 @@
+<?php
+
+include "navbar.php";
+include "connection.php";
+?>
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Library Management System</title>
+    <title>Admin Login</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-  </head>
-  <body>
-    <div class="wrapper">
-      <header style="height: 70px">
-        <div class="logo">
-          <h1
-            style="
-              color: white;
-              font-size: 40px;
-              margin-top: 3px;
-              line-height: 60px;
-            "
-          >
-            Library Management System
-          </h1>
-        </div>
-        <nav style="padding-top: 3px">
-          <ul>
-            <li><a href="index.html">HOME</a></li>
-            <li><a href="books.html">BOOKS</a></li>
-            <li><a href="adlogin.html">ADMIN_LOGIN</a></li>
-            <li><a href="registration.html">REGISTRATION</a></li>
-            <li><a href="feedback.html">FEEDBACK</a></li>
-          </ul>
-        </nav>
-      </header>
 
-      <section>
-        <div class="photo">
+
+    
+
+  <body>
+        <div class="login__photo">
           <br />
           <div class="box1">
-            <br />
-            <h1 style="font-size: 45px">Library Management System</h1>
-            <br /><br />
-            <h1 style="font-size: 30px">User Login Form</h1>
-            <br /><br />
-            <form class="login" name="login" action="" method="">
-              <input
+           
+            <h1 style="font-size: 35px;color:white;margin-top:10px;">Library Management System</h1>
+ 
+            <h1 style="font-size: 25px;color:white;margin-top:25px;">User Login Form</h1>
+           <br>
+            <form  class="login" name="login" action="" method="post">
+              <input class="form-control"
                 type="text"
                 name="Username"
                 placeholder="Enter your username"
                 required
               />
-              <br /><br />
-              <input
+              <br>
+              <input class="form-control"
                 type="password"
-                name="password"
+                name="Password"
                 placeholder="Enter your password"
                 required
               />
-              <br /><br />
-              <button
+              <br />
+              <button class="btn btn-default"name="submit"type="submit"
                 style="
-                  background-color: teal;
+                  background-color: white;
                   height: 35px;
                   width: 70px;
-                  font-size: 16px;
-                "
+                  font-size: 18px;padding:0px;"
               >
                 Login
               </button>
-              <br /><br /><br />
+             
             </form>
+            <br>
 
-            <p style="color: white; margin-left: 70px; font-size: 18px">
-              <a style="color: white; text-decoration: none" href=""
+            <p style="color: white; margin-left: 50px; font-size: 17px">
+              <a style="color: dodger blue; text-decoration: none" href="updatepassword.php"
                 >Forgot Password?</a
               >
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              New to this Website?&nbsp;&nbsp;&nbsp;&nbsp;<a
-                style="color: white; text-decoration: none"
-                href="registration.html"
+              New to this Website?&nbsp;<a
+                style="color: dodger blue; text-decoration: none"
+                href="registration.php"
                 >Create Account</a
               >
             </p>
           </div>
         </div>
-      </section>
-    </div>
+     
+           <?php
+           if(isset($_POST['submit'])){
+             $username=$_POST['Username'];
+             $pass=$_POST['Password'];
+
+             $count=0;
+             $sql="SELECT * FROM `admin` WHERE `username`='$username' AND `password`='$pass'";
+             $res=mysqli_query($conn,$sql);
+             $row=mysqli_fetch_assoc($res);
+             $count=mysqli_num_rows($res);
+
+             if($count==0){
+               ?>
+               <script type="text/javascript">
+               alert("Username and password doesnot match");
+               </script>
+
+               <?php
+             }
+
+             else{
+               $_SESSION['login_username']= $_POST['Username'];
+               $_SESSION['image']=$row['pic'];
+               ?>
+               <script type="text/javascript">
+               window.location="index.php";
+               </script>
+
+               <?php
+             }
+           }
+
+
+    ?>
+   
   </body>
 </html>
