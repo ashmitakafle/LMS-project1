@@ -22,6 +22,7 @@ include "connection.php";
     <style>
       body {
         font-family: "Lato", sans-serif;
+  
       }
 
       .books__search{

@@ -24,15 +24,19 @@ include "connection.php";
         font-family: "Lato", sans-serif;
         background-color:#0d2628; 
       }
+      .issue__container{
+          margin-top:-35px;
+      }
    
-   .approve__form{
-       margin-left:550px;
-       color:white;
-   }
-   .form-control{
-       height:40px;
-       width:400px;
-   }
+      .expired__search{
+          padding-left:1200px;
+          margin-top:0px;
+          
+      }
+      .form-control{
+          height:35px;
+          width:250px;
+      }
 
       .name{
         color:white;
@@ -45,6 +49,12 @@ include "connection.php";
 
       .siden:hover{
         background-color:#088b34;
+      }
+
+      .scroll{
+          height:80px;
+          width:80%;
+          overflow: auto;
       }
 
       .sidenav {
@@ -85,7 +95,7 @@ include "connection.php";
 
       #main {
         transition: margin-left 0.5s;
-        padding: 16px;
+        padding: 5px;
       }
 
       @media screen and (max-height: 450px) {
@@ -122,6 +132,7 @@ include "connection.php";
         <div class="siden"><a href="deletebook.php">Delete Books</a></div>
         <div class="siden"><a href="bookrequest.php">Book Request</a></div>
         <div class="siden"><a href="issue.php">Issue Information</a></div>
+        <div class="siden"><a href="expired.php">Expired List</a></div>
          
          <?php
        
@@ -161,49 +172,98 @@ include "connection.php";
       }
     </script>
 
-    <div class="approve__container">
-      <h3 style="color:white;text-align:center;">Approve Request</h3><br>
-
-      <form class="approve__form" action="" method="post">
-          <input class="form-control" type="text" name="approve" placeholder="Yes or NO" required><br>
-          <input class="form-control" type="text" name="issue" placeholder="Issue Date yyyy-mm-dd" required><br>
-          <input class="form-control" type="text" name="return" placeholder="Return Date yyyy-mm-dd" required><br>
-          <button style="background-color:white;color:black;" class="btn btn-default" name="submit" type="submit">Submit</button>
-      </form>
- </div>
-
-    <?php
-        if(isset($_POST['submit']))
+           <div class="issue__container">
+           <?php
+         if(isset($_SESSION['login_username']))
+         {
+           ?>
+           <div class="expired__search">
+           <form class="request__form" action="" method="post">
+            <input class="form-control" type="text" name="username" placeholder="Username" required><br>
+            <input class="form-control" type="number" name="bid" placeholder="Book ID" required><br>
+            <button class="btn btn-default" style="background-color:white;color:black;" name="submit" type="submit">Submit</button>
+       </form>
+       </div>
+       <?php
+         if(isset($_POST['submit']))
         {
-            $approve=$_POST['approve'];
-            $issue=$_POST['issue'];
-            $return=$_POST['return'];
-            $a="UPDATE `issue_book` SET `approve`='$approve',`issue`='$issue',`returns`='$return'
-             WHERE `username`='$_SESSION[name]' AND `bid`='$_SESSION[bid]'";
-            $s=mysqli_query($conn,$a);
+            $username=$_POST['username'];
+            $bid=$_POST['bid'];
+            $var1='<p style="background-color:green;color:yellow;">RETURNED</p>';
+               $query="UPDATE `issue_book` SET `approve`='$var1' WHERE username='$username' AND bid='$bid' ";
+               $result=mysqli_query($conn,$query);
 
-            $q="UPDATE `books` SET `quantity`= quantity-1 WHERE `bid`='$_SESSION[bid]'";
-            $t=mysqli_query($conn,$q);
-
-            $sql="SELECT `quantity` FROM `books` WHERE `bid`='$_SESSION[bid]'";
-            $res=mysqli_query($conn,$sql);
-            while($row=mysqli_fetch_assoc($res))
-            {
-                if($row['quantity']==0)
-                {
-                    $query="UPDATE `books` SET `status`='Not-Available' WHERE `bid`='$_SESSION[bid]'";
-                    $result=mysqli_query($conn,$query);
-                }
-            }
-            ?>
-             <script type="text/javascript">
-                 alert("Updates Successfully");
-                 window.location="bookrequest.php";
-             </script>
-            <?php
-            
         }
-    ?>
+    }
+       ?>
+    
+
+    
+           <h2 style="text-align: center; color:white;">Expired List</h2>
+
+           <?php
+          
+               if(isset($_SESSION['login_username']))
+               {
+                $var='<p style="background-color:red;color:yellow;">EXPIRED</p>';
+                 $sql="SELECT student.username,rollno, books.bid,name,authors,edition,approve,issue,returns FROM student 
+                 INNER JOIN issue_book ON student.username=issue_book.username 
+                 INNER JOIN books ON issue_book.bid=books.bid WHERE issue_book.approve!='' AND issue_book.approve!='Yes'
+                 ORDER BY issue_book.returns ASC";
+                 $res=mysqli_query($conn,$sql);
+
+                 if(mysqli_num_rows($res)==0){
+                  echo "<h2 style= color:white;font-size:20px;'>";
+               echo "There is no pending request.";
+               echo "</h2>";
+             }
+             else{
+                 
+               echo "<table class='table table-bordered table-hover' >";
+               echo "<tr style='background-color:#6db6b9e6'>";
+               echo "<th>"; echo "Student Username"; echo "</th>";
+               echo "<th>"; echo "RollNo"; echo "</th>";
+               echo "<th>"; echo "Book ID"; echo "</th>";
+               echo "<th>"; echo "Book Name"; echo "</th>";
+               echo "<th>"; echo "Authors"; echo "</th>";
+               echo "<th>"; echo "Edition"; echo "</th>";
+               echo "<th>"; echo "Status"; echo "</th>";
+               echo "<th>"; echo "Issue Date"; echo "</th>";
+               echo "<th>"; echo "Return Date"; echo "</th>";
+           
+               echo "</tr>";
+              while($row=mysqli_fetch_assoc($res)){
+              
+               echo "<tr style='color:white;'>";
+               echo "<td>"; echo $row['username']; echo "</td>";
+               echo "<td>"; echo $row['rollno']; echo "</td>";
+               echo "<td>"; echo $row['bid']; echo "</td>";
+               echo "<td>"; echo $row['name']; echo "</td>";
+               echo "<td>"; echo $row['authors']; echo "</td>";
+               echo "<td>"; echo $row['edition']; echo "</td>";
+               echo "<td>"; echo $row['approve']; echo "</td>";
+               echo "<td>"; echo $row['issue']; echo "</td>";
+               echo "<td>"; echo $row['returns']; echo "</td>";
+           
+               echo "</tr>";
+           
+              }
+           
+               echo "</table>";
+               echo "</div>";
+             }
+           }
+       else{
+           ?>
+              <script type="text/javascript">
+                      alert("You must login first");
+              </script>
+           <?php
+       }
+               
+           ?>
+           
+           </div>
   
     </div>
     </body>

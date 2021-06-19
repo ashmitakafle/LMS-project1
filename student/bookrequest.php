@@ -190,6 +190,15 @@ include "connection.php";
           echo "</table>";
          }
        }
+
+       else{
+         ?>
+              <script type="text/javascript">
+                     alert("You must login first");
+                     window.location="books.php";
+              </script>
+         <?php
+       }
        ?>
 </div>
   </body>

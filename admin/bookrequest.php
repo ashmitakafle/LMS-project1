@@ -117,6 +117,7 @@ include "connection.php";
          <br>
         
          <div class="siden"><a href="profile.php">My Profile</a></div>
+         <div class="siden"><a href="student.php">Student Information</a></div>
         <div class="siden"><a href="addbook.php">Add Books</a></div>
         <div class="siden"><a href="deletebook.php">Delete Books</a></div>
         <div class="siden"><a href="bookrequest.php">Book Request</a></div>
@@ -130,6 +131,7 @@ include "connection.php";
         ?>
         
       <div class="siden"><a href="profile.php">My Profile</a></div>
+      <div class="siden"><a href="student.php">Student Information</a></div>
      <div class="siden"><a href="addbook.php">Add Books</a></div>
      <div class="siden"><a href="deletebook.php">Delete Books</a></div>
      <div class="siden"><a href="bookrequest.php">Book Request</a></div>
@@ -175,12 +177,12 @@ include "connection.php";
     <?php
        if(isset($_SESSION['login_username']))
        {
-           $sql="SELECT student.username,rollno, books.bid,name,authors,edition,status FROM student  
+           $sql="SELECT student.username,rollno, books.bid,name,authors,edition,status,quantity FROM student  
            INNER JOIN issue_book ON student.username=issue_book.username
            INNER JOIN books ON issue_book.bid=books.bid WHERE issue_book.approve=''";
            $res=mysqli_query($conn,$sql);
            if(mysqli_num_rows($res)==0){
-               echo "<h2 style= color:white;'>";
+               echo "<h2 style= color:white;font-size:20px;'>";
             echo "There is no pending request.";
             echo "</h2>";
           }
@@ -194,6 +196,7 @@ include "connection.php";
             echo "<th>"; echo "Authors"; echo "</th>";
             echo "<th>"; echo "Edition"; echo "</th>";
             echo "<th>"; echo "Status"; echo "</th>";
+            echo "<th>"; echo "Quantity"; echo "</th>";
         
             echo "</tr>";
            while($row=mysqli_fetch_assoc($res)){
@@ -205,6 +208,7 @@ include "connection.php";
             echo "<td>"; echo $row['authors']; echo "</td>";
             echo "<td>"; echo $row['edition']; echo "</td>";
             echo "<td>"; echo $row['status']; echo "</td>";
+            echo "<td>"; echo $row['quantity']; echo "</td>";
         
             echo "</tr>";
         

@@ -123,6 +123,7 @@ include "connection.php";
          <br>
         
          <div class="siden"><a href="profile.php">My Profile</a></div>
+         <div class="siden"><a href="student.php">Student Information</a></div>
          <div class="siden"><a href="addbook.php">Add Books</a></div>
          <div class="siden"><a href="deletbook.php">Delete Books</a></div>
          <div class="siden"><a href="bookrequest.php">Book Request</a></div>
@@ -136,6 +137,7 @@ include "connection.php";
         ?>
         
         <div class="siden"><a href="profile.php">My Profile</a></div>
+        <div class="siden"><a href="student.php">Student Information</a></div>
          <div class="siden"><a href="addbook.php">Add Books</a></div>
          <div class="siden"><a href="deletbook.php">Delete Books</a></div>
          <div class="siden"><a href="bookrequest.php">Book Request</a></div>

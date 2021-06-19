@@ -1,3 +1,7 @@
+<?php
+include "navbar.php";
+include "connection.php";
+?>
 <!DOCTYPE html>
 <html>
   <head>  
@@ -18,13 +22,21 @@
     <style>
       body {
         font-family: "Lato", sans-serif;
+        background-color:#0d2628; 
       }
-
+   
+   .approve__form{
+       margin-left:550px;
+       color:white;
+   }
+   .form-control{
+       height:40px;
+       width:400px;
+   }
 
       .name{
         color:white;
         margin-left:20px;
-       
       }
       .siden{
         font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;  
@@ -34,9 +46,7 @@
       .siden:hover{
         background-color:#088b34;
       }
-      .siden a:hover{
-        text-decoration:none;
-      }
+
       .sidenav {
         height: 100%;
         width: 0;
@@ -63,7 +73,6 @@
 
       .sidenav a:hover {
         color: #f1f1f1;
-        text-decoration:none;
       }
 
       .sidenav .closebtn {
@@ -113,6 +122,7 @@
         <div class="siden"><a href="deletebook.php">Delete Books</a></div>
         <div class="siden"><a href="bookrequest.php">Book Request</a></div>
         <div class="siden"><a href="issue.php">Issue Information</a></div>
+        <div class="siden"><a href="expired.php">Expired List</a></div>
          
          <?php
        
@@ -135,7 +145,7 @@
     </div>
 
     <div id="main">
-      <span style="font-size: 30px; cursor: pointer" onclick="openNav()"
+      <span style="font-size: 30px; cursor: pointer;color:white;" onclick="openNav()"
         >&#9776;
       </span>
     
@@ -151,6 +161,78 @@
         document.getElementById("main").style.marginLeft = "0";
       }
     </script>
+
+           <div class="issue__container">
+           <h2 style="text-align: center; color:white;">Information of Borrowed Books</h2>
+
+           <?php
+           $c=0;
+               if(isset($_SESSION['login_username']))
+               {
+                 $sql="SELECT student.username,rollno, books.bid,name,authors,edition,issue,returns FROM student 
+                 INNER JOIN issue_book ON student.username=issue_book.username 
+                 INNER JOIN books ON issue_book.bid=books.bid WHERE issue_book.approve='Yes' 
+                 ORDER BY issue_book.returns ASC";
+                 $res=mysqli_query($conn,$sql);
+
+                 if(mysqli_num_rows($res)==0){
+                  echo "<h2 style= color:white;font-size:20px;'>";
+               echo "There is no pending request.";
+               echo "</h2>";
+             }
+             else{
+               echo "<table class='table table-bordered table-hover' >";
+               echo "<tr style='background-color:#6db6b9e6'>";
+               echo "<th>"; echo "Student Username"; echo "</th>";
+               echo "<th>"; echo "RollNo"; echo "</th>";
+               echo "<th>"; echo "Book ID"; echo "</th>";
+               echo "<th>"; echo "Book Name"; echo "</th>";
+               echo "<th>"; echo "Authors"; echo "</th>";
+               echo "<th>"; echo "Edition"; echo "</th>";
+               echo "<th>"; echo "Issue Date"; echo "</th>";
+               echo "<th>"; echo "Return Date"; echo "</th>";
+           
+               echo "</tr>";
+              while($row=mysqli_fetch_assoc($res)){
+                $d=date("Y-m-d");
+                if($d>$row['returns'])
+                {
+                  $c=$c+1;
+                  $var='<p style="background-color:red;color:yellow;">EXPIRED</p>';
+                  $query="UPDATE `issue_book` SET `approve`='$var' WHERE `returns`='$row[returns]' AND `approve`='Yes' limit $c";
+                  $result=mysqli_query($conn,$query);
+                  echo $d. "</br>";
+
+                }
+               echo "<tr style='color:white;'>";
+               echo "<td>"; echo $row['username']; echo "</td>";
+               echo "<td>"; echo $row['rollno']; echo "</td>";
+               echo "<td>"; echo $row['bid']; echo "</td>";
+               echo "<td>"; echo $row['name']; echo "</td>";
+               echo "<td>"; echo $row['authors']; echo "</td>";
+               echo "<td>"; echo $row['edition']; echo "</td>";
+               echo "<td>"; echo $row['issue']; echo "</td>";
+               echo "<td>"; echo $row['returns']; echo "</td>";
+           
+               echo "</tr>";
+           
+              }
+           
+               echo "</table>";
+             }
+           }
+       else{
+           ?>
+              <script type="text/javascript">
+                      alert("You must login first");
+              </script>
+           <?php
+       }
+               
+           ?>
+           
+           </div>
+  
     </div>
     </body>
     </html>

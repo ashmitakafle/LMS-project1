@@ -178,7 +178,8 @@ include "connection.php";
            </script>
         <?php
     }
-    
+    if(isset($_SESSION['login_username']))
+    {
       $sql="SELECT * FROM `student` WHERE `username`='$_SESSION[login_username]'";
       $res=mysqli_query($conn,$sql);
       ?>
@@ -238,6 +239,17 @@ include "connection.php";
    echo "<td>"; echo $row['contact']; echo "</td>";
    echo "</tr>";
    echo "</table>";
+    }
+
+
+    else{
+      ?>
+           <script type="text/javascript">
+                  alert("You must login first");
+                  window.location="books.php";
+           </script>
+      <?php
+    }
 
 
 
