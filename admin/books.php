@@ -122,6 +122,7 @@ include "connection.php";
         <div class="siden"><a href="deletebook.php">Delete Books</a></div>
         <div class="siden"><a href="bookrequest.php">Book Request</a></div>
         <div class="siden"><a href="issue.php">Issue Information</a></div>
+        <div class="siden"><a href="expired.php">Expired List</a></div>
          
          <?php
        
@@ -136,6 +137,7 @@ include "connection.php";
      <div class="siden"><a href="deletebook.php">Delete Books</a></div>
      <div class="siden"><a href="bookrequest.php">Book Request</a></div>
      <div class="siden"><a href="issue.php">Issue Information</a></div>
+     <div class="siden"><a href="expired.php">Expired List</a></div>
     
         <?php
       }
@@ -218,6 +220,7 @@ include "connection.php";
 
 
 else{
+  
     $sql="SELECT * FROM `books` ORDER BY `books`.`name` ASC";
     $res=mysqli_query($conn,$sql);
 
@@ -248,13 +251,9 @@ else{
 
     echo "</table>";
   }
-
-
-
-
-   
-
 ?>
 </div>
+
+
   </body>
 </html>

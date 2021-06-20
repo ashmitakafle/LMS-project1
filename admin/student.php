@@ -115,11 +115,12 @@ include "connection.php";
          <br>
         
          <div class="siden"><a href="profile.php">My Profile</a></div>
-         <div class="siden"><a href="student.php">Student Information</a></div>
+        
         <div class="siden"><a href="addbook.php">Add Books</a></div>
         <div class="siden"><a href="deletebook.php">Delete Books</a></div>
         <div class="siden"><a href="bookrequest.php">Book Request</a></div>
         <div class="siden"><a href="issue.php">Issue Information</a></div>
+        <div class="siden"><a href="expired.php">Expired List</a></div>
          
          <?php
        
@@ -129,11 +130,12 @@ include "connection.php";
         ?>
         
       <div class="siden"><a href="profile.php">My Profile</a></div>
-      <div class="siden"><a href="student.php">Student Information</a></div>
+     
      <div class="siden"><a href="addbook.php">Add Books</a></div>
      <div class="siden"><a href="deletebook.php">Delete Books</a></div>
      <div class="siden"><a href="bookrequest.php">Book Request</a></div>
      <div class="siden"><a href="issue.php">Issue Information</a></div>
+     <div class="siden"><a href="expired.php">Expired List</a></div>
     
         <?php
       }
@@ -216,7 +218,7 @@ include "connection.php";
             $res=mysqli_query($conn,$sql);
 
             
-                echo "<table class='table table-bordered table-hover'>";
+                echo "<table class='table table-bordered table-hover' style='width:99%;'>";
                 echo "<tr style='background-color:#6db6b9e6'>";
                 echo "<th>"; echo "ID"; echo "</th>";
                 echo "<th>"; echo "First Name"; echo "</th>";

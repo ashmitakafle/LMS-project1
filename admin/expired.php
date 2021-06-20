@@ -25,7 +25,7 @@ include "connection.php";
         background-color:#0d2628; 
       }
       .issue__container{
-          margin-top:-35px;
+          margin-top:-50px;
       }
    
       .expired__search{
@@ -50,12 +50,13 @@ include "connection.php";
       .siden:hover{
         background-color:#088b34;
       }
-
       .scroll{
-          height:80px;
-          width:80%;
-          overflow: auto;
+        height:500px;
+        width:99%;
+        overflow-y: auto;
       }
+
+
 
       .sidenav {
         height: 100%;
@@ -96,6 +97,7 @@ include "connection.php";
       #main {
         transition: margin-left 0.5s;
         padding: 5px;
+       
       }
 
       @media screen and (max-height: 450px) {
@@ -132,7 +134,7 @@ include "connection.php";
         <div class="siden"><a href="deletebook.php">Delete Books</a></div>
         <div class="siden"><a href="bookrequest.php">Book Request</a></div>
         <div class="siden"><a href="issue.php">Issue Information</a></div>
-        <div class="siden"><a href="expired.php">Expired List</a></div>
+       
          
          <?php
        
@@ -177,11 +179,19 @@ include "connection.php";
          if(isset($_SESSION['login_username']))
          {
            ?>
+
+           <div style="float:left;padding:30px;margin-left:40px;">
+           <form class="request__btn" action="" method="post">
+           <button style="background-color: green;color:yellow;" class="btn btn-default" type="submit" name="submit1">RETURNED</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+           <button style="background-color: red;color:yellow;" class="btn btn-default" type="submit" name="submit2">EXPIRED</button>
+           </form>
+           </div>
+
            <div class="expired__search">
            <form class="request__form" action="" method="post">
             <input class="form-control" type="text" name="username" placeholder="Username" required><br>
             <input class="form-control" type="number" name="bid" placeholder="Book ID" required><br>
-            <button class="btn btn-default" style="background-color:white;color:black;" name="submit" type="submit">Submit</button>
+            <button class="btn btn-default" style="background-color:white;color:black;" name="submit" type="submit">Return Book</button>
        </form>
        </div>
        <?php
@@ -205,12 +215,34 @@ include "connection.php";
           
                if(isset($_SESSION['login_username']))
                {
-                $var='<p style="background-color:red;color:yellow;">EXPIRED</p>';
-                 $sql="SELECT student.username,rollno, books.bid,name,authors,edition,approve,issue,returns FROM student 
-                 INNER JOIN issue_book ON student.username=issue_book.username 
-                 INNER JOIN books ON issue_book.bid=books.bid WHERE issue_book.approve!='' AND issue_book.approve!='Yes'
-                 ORDER BY issue_book.returns ASC";
-                 $res=mysqli_query($conn,$sql);
+                 if(isset($_POST['submit1']))
+                 {
+                  $return='<p style="background-color:green;color:yellow;">RETURNED</p>';
+                  $sql="SELECT student.username,rollno, books.bid,name,authors,edition,approve,issue,returns FROM student 
+                  INNER JOIN issue_book ON student.username=issue_book.username 
+                  INNER JOIN books ON issue_book.bid=books.bid WHERE issue_book.approve='$return'
+                  ORDER BY issue_book.returns DESC";
+                  $res=mysqli_query($conn,$sql);
+                 }
+
+                 elseif(isset($_POST['submit2']))
+                 {
+                  $expired='<p style="background-color:red;color:yellow;">EXPIRED</p>';
+                  $sql="SELECT student.username,rollno, books.bid,name,authors,edition,approve,issue,returns FROM student 
+                  INNER JOIN issue_book ON student.username=issue_book.username 
+                  INNER JOIN books ON issue_book.bid=books.bid WHERE issue_book.approve='$expired'
+                  ORDER BY issue_book.returns DESC";
+                  $res=mysqli_query($conn,$sql);
+                 }
+
+                 else{
+                  $var='<p style="background-color:red;color:yellow;">EXPIRED</p>';
+                  $sql="SELECT student.username,rollno, books.bid,name,authors,edition,approve,issue,returns FROM student 
+                  INNER JOIN issue_book ON student.username=issue_book.username 
+                  INNER JOIN books ON issue_book.bid=books.bid WHERE issue_book.approve!='' AND issue_book.approve!='Yes'
+                  ORDER BY issue_book.returns DESC";
+                  $res=mysqli_query($conn,$sql);
+                 }
 
                  if(mysqli_num_rows($res)==0){
                   echo "<h2 style= color:white;font-size:20px;'>";
@@ -218,9 +250,10 @@ include "connection.php";
                echo "</h2>";
              }
              else{
-                 
+            
+              echo "<div class='scroll'>";
                echo "<table class='table table-bordered table-hover' >";
-               echo "<tr style='background-color:#6db6b9e6'>";
+               echo "<tr style='background-color:#6db6b9e6;'>";
                echo "<th>"; echo "Student Username"; echo "</th>";
                echo "<th>"; echo "RollNo"; echo "</th>";
                echo "<th>"; echo "Book ID"; echo "</th>";
@@ -230,10 +263,12 @@ include "connection.php";
                echo "<th>"; echo "Status"; echo "</th>";
                echo "<th>"; echo "Issue Date"; echo "</th>";
                echo "<th>"; echo "Return Date"; echo "</th>";
+               
            
                echo "</tr>";
               while($row=mysqli_fetch_assoc($res)){
-              
+               
+               
                echo "<tr style='color:white;'>";
                echo "<td>"; echo $row['username']; echo "</td>";
                echo "<td>"; echo $row['rollno']; echo "</td>";
@@ -250,7 +285,9 @@ include "connection.php";
               }
            
                echo "</table>";
-               echo "</div>";
+               echo "</scroll>";
+             
+               
              }
            }
        else{

@@ -119,7 +119,8 @@ include "connection.php";
 
          ?>
          <script type ="text/javascript">
-         alert("Registration Successfully");
+          alert("Registered Successfully");
+         window.location="../login.php";
          </script>
 
 

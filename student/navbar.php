@@ -69,8 +69,8 @@ session_start();
         <nav style="padding-top:3px;">
           <ul>
             <li><a style="text-decoration: none" href="index.php">HOME</a></li>
-            <li><a style="text-decoration: none" href="books.php">BOOKS</a></li>
-            <li><a style="text-decoration: none" href="login.php">LOGIN</a></li>
+            <li><a style="text-decoration: none" href="../books.php">BOOKS</a></li>
+            <li><a style="text-decoration: none" href=".../login.php">LOGIN</a></li>
             <li>
               <a style="text-decoration: none" href="registration.php"
                 >SIGNUP</a

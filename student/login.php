@@ -90,7 +90,7 @@ include "connection.php";
                $_SESSION['image']=$row['pic'];
                ?>
                <script type="text/javascript">
-               window.location="index.php";
+               window.location="profile.php";
                </script>
 
                <?php
