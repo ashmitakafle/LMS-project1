@@ -86,7 +86,7 @@ include "connection.php";
               $row=mysqli_fetch_assoc($res);
               $count=mysqli_num_rows($res);
  
-              if($count==0){
+              if($count==0){    
                 ?>
                 <script type="text/javascript">
                 alert("Username and password doesnot match");

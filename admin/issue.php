@@ -29,10 +29,16 @@ include "connection.php";
        margin-left:550px;
        color:white;
    }
-   .form-control{
-       height:40px;
-       width:400px;
-   }
+   .issue__search{
+          margin-left:1200px;
+          padding-top:-50px;
+          
+      }
+      .form-control{
+          height:35px;
+          width:250px;
+      }
+ 
 
       .name{
         color:white;
@@ -117,11 +123,12 @@ include "connection.php";
          <br>
         
          <div class="siden"><a href="profile.php">My Profile</a></div>
-         <div class="siden"><a href="student.php">Student Information</a></div>
         <div class="siden"><a href="addbook.php">Add Books</a></div>
         <div class="siden"><a href="deletebook.php">Delete Books</a></div>
         <div class="siden"><a href="bookrequest.php">Book Request</a></div>
+        <div class="siden"><a href="issue.php">Issue Information</a></div>
         <div class="siden"><a href="expired.php">Expired List</a></div>
+        <div class="siden"><a href="fine.php">Fines</a></div>
          
          <?php
        
@@ -131,11 +138,12 @@ include "connection.php";
         ?>
         
       <div class="siden"><a href="profile.php">My Profile</a></div>
-      <div class="siden"><a href="student.php">Student Information</a></div>
      <div class="siden"><a href="addbook.php">Add Books</a></div>
      <div class="siden"><a href="deletebook.php">Delete Books</a></div>
      <div class="siden"><a href="bookrequest.php">Book Request</a></div>
+     <div class="siden"><a href="issue.php">Issue Information</a></div>
      <div class="siden"><a href="expired.php">Expired List</a></div>
+     <div class="siden"><a href="fine.php">Fines</a></div>
     
         <?php
       }
@@ -162,16 +170,65 @@ include "connection.php";
     </script>
 
            <div class="issue__container">
-           <h2 style="text-align: center; color:white;">Information of Borrowed Books</h2>
-
+           
+           <div class="issue__search">
+           <form class="issue__form" action="" method="post">
+            <input class="form-control" type="text" name="username" placeholder="Username" required><br>
+            <input class="form-control" type="number" name="bid" placeholder="Book ID" required><br>
+            <button class="btn btn-default" style="background-color:white;color:black;" name="submit" type="submit">Return Book</button>
+       </form>
+       </div>
+       <h2 style="text-align: center; color:white;">Information of Borrowed Books</h2>
+       
            <?php
-           $c=0;
+ if(isset($_POST['submit']))
+ {
+   $username=$_POST['username'];
+   $bid=$_POST['bid'];
+ 
+     $var1='<p style="background-color:green;color:yellow;">RETURNED</p>';
+        $query="UPDATE `issue_book` SET `approve`='$var1' WHERE username='$username' AND bid='$bid' ";
+        $result=mysqli_query($conn,$query);
+
+   
+        $a="SELECT * FROM `issue_book` WHERE `username`='$username' AND `bid`='$bid'";
+        $r=mysqli_query($conn,$a);
+        $x="UPDATE `books` SET `quantity`= quantity+1 WHERE bid='$bid' ";
+        $y=mysqli_query($conn,$x);
+
+        $count=mysqli_num_rows($r);
+
+
+        if($count==0)
+        {
+          ?>
+          <script type="text/javascript">
+                alert("Please enter correct username and bid");
+          </script>
+      <?php 
+        }
+        else
+        {
+          ?>
+          <script type="text/javascript">
+          window.location="expired.php";
+          </script>
+          <?php
+        }
+         
+       } 
+
+       
+
+       else
+       {
+          
                if(isset($_SESSION['login_username']))
                {
                  $sql="SELECT student.username,rollno, books.bid,name,authors,edition,issue,returns FROM student 
                  INNER JOIN issue_book ON student.username=issue_book.username 
                  INNER JOIN books ON issue_book.bid=books.bid WHERE issue_book.approve='Yes' 
-                 ORDER BY issue_book.returns ASC";
+                 ORDER BY issue_book.returns DESC";
                  $res=mysqli_query($conn,$sql);
 
                  if(mysqli_num_rows($res)==0){
@@ -202,6 +259,12 @@ include "connection.php";
                   $result=mysqli_query($conn,$query);
                   echo $d. "</br>";
 
+                  ?>
+                    <script type="text/javascript">
+                    window.location="expired.php";
+                    </script>
+                  <?php
+
                 }
                echo "<tr style='color:white;'>";
                echo "<td>"; echo $row['username']; echo "</td>";
@@ -220,6 +283,7 @@ include "connection.php";
                echo "</table>";
              }
            }
+          
        else{
            ?>
               <script type="text/javascript">
@@ -227,6 +291,7 @@ include "connection.php";
               </script>
            <?php
        }
+      }
                
            ?>
            

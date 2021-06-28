@@ -1,5 +1,6 @@
 <?php
 session_start();
+include "connection.php";
 ?>
 <!DOCTYPE html>
 <html>
@@ -86,5 +87,30 @@ session_start();
         }
       ?>
       </header>
+        
+        <?php
+     if(isset($_SESSION['login_username']))
+     {
+      $day=0;
+      $expired='<p style="background-color:red;color:yellow;">EXPIRED</p>';
+      $sql="SELECT `returns` FROM `issue_book` WHERE `username`='$_SESSION[login_username]' AND `approve`='$expired'";
+      $res=mysqli_query($conn,$sql);
+      while($row=mysqli_fetch_assoc($res))
+      {
+         $d=strtotime($row['returns']);
+         $c=strtotime(date("Y-m-d"));
+         $diff=$c-$d;
+         if($diff>=0)
+         {
+           $day=$day+floor($diff/(60*60*24));
+           
+           
+         }
+      }
+      $_SESSION['day']=$day;
+     
+     }
+        ?>
+
       </body>
       </html>

@@ -98,7 +98,8 @@ while($row=mysqli_fetch_assoc($result))
       <button class="btn btn-default" style="background-color:white;color:black;" type="submit" name="submit">Save</button>
 </form>
 
-</div>
+</div>  
+
 
 <?php
 if(isset($_POST['submit'])){

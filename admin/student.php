@@ -115,12 +115,12 @@ include "connection.php";
          <br>
         
          <div class="siden"><a href="profile.php">My Profile</a></div>
-        
         <div class="siden"><a href="addbook.php">Add Books</a></div>
         <div class="siden"><a href="deletebook.php">Delete Books</a></div>
         <div class="siden"><a href="bookrequest.php">Book Request</a></div>
         <div class="siden"><a href="issue.php">Issue Information</a></div>
         <div class="siden"><a href="expired.php">Expired List</a></div>
+        <div class="siden"><a href="fine.php">Fines</a></div>
          
          <?php
        
@@ -130,12 +130,12 @@ include "connection.php";
         ?>
         
       <div class="siden"><a href="profile.php">My Profile</a></div>
-     
      <div class="siden"><a href="addbook.php">Add Books</a></div>
      <div class="siden"><a href="deletebook.php">Delete Books</a></div>
      <div class="siden"><a href="bookrequest.php">Book Request</a></div>
      <div class="siden"><a href="issue.php">Issue Information</a></div>
      <div class="siden"><a href="expired.php">Expired List</a></div>
+     <div class="siden"><a href="fine.php">Fines</a></div>
     
         <?php
       }

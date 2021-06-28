@@ -128,13 +128,13 @@ include "connection.php";
          </div>
          <br>
         
-         <div class="siden"><a href="profile.php">My Profile</a></div>
-        <div class="siden"><a href="addbook.php">Add Books</a></div>
-        <div class="siden"><a href="deletebook.php">Delete Books</a></div>
-        <div class="siden"><a href="bookrequest.php">Book Request</a></div>
-        <div class="siden"><a href="issue.php">Issue Information</a></div>
-        <div class="siden"><a href="expired.php">Expired List</a></div>
-        <div class="siden"><a href="fine.php">Fines</a></div>
+     <div class="siden"><a href="profile.php">My Profile</a></div>
+     <div class="siden"><a href="books.php">Books</a></div>
+     <div class="siden"><a href="bookrequest.php">Book Request</a></div>
+     <div class="siden"><a href="issue.php">Issue Information</a></div>
+     <div class="siden"><a href="expired.php">Expired List</a></div>
+     <div class="siden"><a href="fine.php">Fines</a></div>
+       
          
          <?php
        
@@ -143,9 +143,8 @@ include "connection.php";
       else{
         ?>
         
-      <div class="siden"><a href="profile.php">My Profile</a></div>
-     <div class="siden"><a href="addbook.php">Add Books</a></div>
-     <div class="siden"><a href="deletebook.php">Delete Books</a></div>
+     <div class="siden"><a href="profile.php">My Profile</a></div>
+     <div class="siden"><a href="books.php">Books</a></div>
      <div class="siden"><a href="bookrequest.php">Book Request</a></div>
      <div class="siden"><a href="issue.php">Issue Information</a></div>
      <div class="siden"><a href="expired.php">Expired List</a></div>
@@ -187,87 +186,36 @@ include "connection.php";
            <button style="background-color: red;color:yellow;" class="btn btn-default" type="submit" name="submit2">EXPIRED</button>
            </form>
            </div>
-
-           <div class="expired__search">
-           <form class="request__form" action="" method="post">
-            <input class="form-control" type="text" name="username" placeholder="Username" required><br>
-            <input class="form-control" type="number" name="bid" placeholder="Book ID" required><br>
-            <button class="btn btn-default" style="background-color:white;color:black;" name="submit" type="submit">Return Book</button>
-       </form>
-       </div>
+              
+              <div style="margin-left:1350px;">
+              <h5 style="color: white;">
+              Your fine is:
+              <?php
+                  echo "Rs. " .($_SESSION['day']*5);
+              ?>
+              </h5>
+              </div>
        <?php
-         if(isset($_POST['submit']))
-        {
-          $username=$_POST['username'];
-          $bid=$_POST['bid'];
-          $expired='<p style="background-color:red;color:yellow;">EXPIRED</p>';
-          $m="SELECT * FROM `issue_book` WHERE `username`='$username' AND `bid`='$bid'";
-          $p=mysqli_query($conn,$m);
 
-          while($row=mysqli_fetch_assoc($p))
-          {
-            $d=strtotime($row['returns']);
-            $c=strtotime(date("Y-m-d"));
-            $diff=$c-$d;
-            if($diff>=0)
-            {
-              $day=floor($diff/(60*60*24));
-              $fine=$day*5;
-            }
-            $x=date("Y-m-d");
-            $r="INSERT INTO `fines`(`username`, `bid`, `returned`, `status`, `day`, `fine`)
-             VALUES ('$username','$bid','$x','paid','$day','$fine')";
-            $l=mysqli_query($conn,$r);
-
-          }
-            $var1='<p style="background-color:green;color:yellow;">RETURNED</p>';
-               $query="UPDATE `issue_book` SET `approve`='$var1' WHERE username='$username' AND bid='$bid' ";
-               $result=mysqli_query($conn,$query);
-
-          
-               $a="SELECT * FROM `issue_book` WHERE `username`='$username' AND `bid`='$bid'";
-               $r=mysqli_query($conn,$a);
-               $x="UPDATE `books` SET `quantity`= quantity+1 WHERE bid='$bid' ";
-               $y=mysqli_query($conn,$x);
-               ?>
-               <script type="text/javascript">
-               window.location="fine.php";
-               </script>
-               <?php
-               $count=mysqli_num_rows($r);
-               if($count==0)
-               {
-                 ?>
-                 <script type="text/javascript">
-                       alert("Please enter correct username and bid");
-                 </script>
-             <?php 
-               } 
-              }  
-               else {
-
-   
+    }
        ?>
     
 
     
-           <h2 style="text-align: center; color:white;">Expired List</h2>
+           <h2 style="margin-left:700px; color:white;">Expired List</h2><br>
 
            <?php
           
                if(isset($_SESSION['login_username']))
                {
-
-
-                 if(isset($_POST['submit1']))
+                 if(isset($_POST['submit1']))  
                  {
-
-
-                  ?>
-                    <script type="text/javascript">
-                    window.location="return.php";
-                    </script>
-                  <?php
+                  $return='<p style="background-color:green;color:yellow;">RETURNED</p>';
+                  $sql="SELECT student.username,rollno, books.bid,name,authors,edition,approve,issue,returns FROM student 
+                  INNER JOIN issue_book ON student.username=issue_book.username 
+                  INNER JOIN books ON issue_book.bid=books.bid WHERE issue_book.approve='$return' AND issue_book.username='$_SESSION[login_username]'
+                  ORDER BY issue_book.returns DESC";
+                  $res=mysqli_query($conn,$sql);
                  }
 
                  elseif(isset($_POST['submit2']))
@@ -275,21 +223,16 @@ include "connection.php";
                   $expired='<p style="background-color:red;color:yellow;">EXPIRED</p>';
                   $sql="SELECT student.username,rollno, books.bid,name,authors,edition,approve,issue,returns FROM student 
                   INNER JOIN issue_book ON student.username=issue_book.username 
-                  INNER JOIN books ON issue_book.bid=books.bid WHERE issue_book.approve='$expired'
+                  INNER JOIN books ON issue_book.bid=books.bid WHERE issue_book.approve='$expired' AND issue_book.username='$_SESSION[login_username]'
                   ORDER BY issue_book.returns DESC";
                   $res=mysqli_query($conn,$sql);
-                  ?>
-                  <script type="text/javascript">
-                  window.location="exp.php";
-                  </script>
-                <?php
                  }
 
                  else{
                   $var='<p style="background-color:red;color:yellow;">EXPIRED</p>';
                   $sql="SELECT student.username,rollno, books.bid,name,authors,edition,approve,issue,returns FROM student 
                   INNER JOIN issue_book ON student.username=issue_book.username 
-                  INNER JOIN books ON issue_book.bid=books.bid WHERE issue_book.approve!='' AND issue_book.approve!='Yes'
+                  INNER JOIN books ON issue_book.bid=books.bid WHERE issue_book.approve!='' AND issue_book.approve!='Yes' AND issue_book.username='$_SESSION[login_username]'
                   ORDER BY issue_book.returns DESC";
                   $res=mysqli_query($conn,$sql);
                  }
@@ -337,10 +280,16 @@ include "connection.php";
                echo "</table>";
                echo "</scroll>";
              
-            } 
+               
              }
            }
-         }
+       else{
+           ?>
+              <script type="text/javascript">
+                      alert("You must login first");
+              </script>
+           <?php
+       }
                
            ?>
            

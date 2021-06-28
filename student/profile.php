@@ -5,7 +5,7 @@ include "connection.php";
 <!DOCTYPE html>
 <html>
   <head>  
-    <title>Student Login</title>
+    <title>Admin Profile</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -29,6 +29,7 @@ include "connection.php";
      
       .name{
         color:white;
+        margin-left:20px;
        
       }
       .siden{
@@ -121,10 +122,12 @@ include "connection.php";
          </div>
          <br>
         
-         <div class="siden"><a href="profile.php">My Profile</a></div>
-         <div class="siden"><a href="books.php">Books</a></div>
-         <div class="siden"><a href="bookrequest.php">Book Request</a></div>
-         <div class="siden"><a href="issue.php">Issue Information</a></div>
+      <div class="siden"><a href="profile.php">My Profile</a></div>
+     <div class="siden"><a href="books.php">Books</a></div>
+     <div class="siden"><a href="bookrequest.php">Book Request</a></div>
+     <div class="siden"><a href="issue.php">Issue Information</a></div>
+     <div class="siden"><a href="expired.php">Expired List</a></div>
+     <div class="siden"><a href="fine.php">Fines</a></div>
          
          <?php
        
@@ -132,12 +135,12 @@ include "connection.php";
 
       else{
         ?>
-        
-      <div class="siden"><a href="profile.php">My Profile</a></div>
+     <div class="siden"><a href="profile.php">My Profile</a></div>
      <div class="siden"><a href="books.php">Books</a></div>
      <div class="siden"><a href="bookrequest.php">Book Request</a></div>
      <div class="siden"><a href="issue.php">Issue Information</a></div>
-    
+     <div class="siden"><a href="expired.php">Expired List</a></div>
+     <div class="siden"><a href="fine.php">Fines</a></div>
         <?php
       }
 
@@ -178,10 +181,10 @@ include "connection.php";
            </script>
         <?php
     }
-    if(isset($_SESSION['login_username']))
-    {
+    
       $sql="SELECT * FROM `student` WHERE `username`='$_SESSION[login_username]'";
       $res=mysqli_query($conn,$sql);
+     
       ?>
         <h3 style="color:white;font-size:30px;">My Profile </h3>
         <?php
@@ -197,59 +200,49 @@ include "connection.php";
          
  
    <?php
-   
+   echo "<b>";
    echo "<table class='table table-bordered' style='color:white;' >";
    echo "<tr>";
-   echo "<td>"; echo "<b>ID:</b>"; echo "</td>";
+   echo "<td>"; echo "ID:"; echo "</td>";
    echo "<td>"; echo $row['id']; echo "</td>";
    echo "</tr>";
 
    echo "<tr>";
-   echo "<td>"; echo "<b>First Name:</b>"; echo "</td>";
+   echo "<td>"; echo "First Name:"; echo "</td>";
    echo "<td>"; echo $row['firstname']; echo "</td>";
    echo "</tr>";
 
    echo "<tr>";
-   echo "<td>"; echo "<b>Last Name:</b>"; echo "</td>";
+   echo "<td>"; echo "Last Name:"; echo "</td>";
    echo "<td>"; echo $row['lastname']; echo "</td>";
    echo "</tr>";
 
    echo "<tr>";
-   echo "<td>"; echo "<b>Username:</b>"; echo "</td>";
+   echo "<td>"; echo "Username:"; echo "</td>";
    echo "<td>"; echo $row['username']; echo "</td>";
    echo "</tr>";
 
    echo "<tr>";
-   echo "<td>"; echo "<b>Password:</b>"; echo "</td>";
+   echo "<td>"; echo "Password:"; echo "</td>";
    echo "<td>"; echo $row['password']; echo "</td>";
    echo "</tr>";
 
    echo "<tr>";
-   echo "<td>"; echo "<b>RollNO:</b>"; echo "</td>";
+   echo "<td>"; echo "RollNo:"; echo "</td>";
    echo "<td>"; echo $row['rollno']; echo "</td>";
    echo "</tr>";
 
    echo "<tr>";
-   echo "<td>"; echo "<b>Email:</b>"; echo "</td>";
+   echo "<td>"; echo "Email:"; echo "</td>";
    echo "<td>"; echo $row['email']; echo "</td>";
    echo "</tr>";
 
    echo "<tr>";
-   echo "<td>"; echo "<b>Contact:</b>"; echo "</td>";
+   echo "<td>"; echo "Contact:"; echo "</td>";
    echo "<td>"; echo $row['contact']; echo "</td>";
    echo "</tr>";
    echo "</table>";
-    }
-
-
-    else{
-      ?>
-           <script type="text/javascript">
-                  alert("You must login first");
-                  window.location="books.php";
-           </script>
-      <?php
-    }
+   echo "</b>";
 
 
 

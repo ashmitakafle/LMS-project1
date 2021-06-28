@@ -23,20 +23,15 @@ include "connection.php";
       body {
         font-family: "Lato", sans-serif;
         background-color:#0d2628; 
+        height:1200px;
+  
       }
-      .request__search{
-          padding-left:1200px;
-          margin-top:0px;
-          
-      }
-      .form-control{
-          height:35px;
-          width:250px;
-      }
+
 
       .name{
         color:white;
         margin-left:20px;
+       
       }
       .siden{
         font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;  
@@ -47,6 +42,9 @@ include "connection.php";
         background-color:#088b34;
       }
 
+      .student__container{
+        margin-left:1200px;
+      }
       .sidenav {
         height: 100%;
         width: 0;
@@ -162,100 +160,103 @@ include "connection.php";
         document.getElementById("main").style.marginLeft = "0";
       }
     </script>
-
-    <div class="request__container">
-    
-
-    <div class="request__search">
-       <form class="request__form" action="" method="post">
-            <input class="form-control" type="text" name="username" placeholder="Username" required><br>
-            <input class="form-control" type="number" name="bid" placeholder="Book ID" required><br>
-            <button class="btn btn-default" style="background-color:white;color:black;" name="submit" type="submit">Submit</button>
-       </form>
+    <div class="student__container">
+     
+     <form class="search" action="" method="post" name="form">
+        <input style="height:40px;width:200px"  type="text" name="search" type="search" placeholder="Enter Username" required></input>
+        <button style="height:40px; width:40px;background-color:#6db6b9e6;" class="btn btn-default" name="submit" type="submit">
+        <i class="fas fa-search" style="color:white;"></i>
+        </button>
+    </form>
     </div>
-    <h2 style="text-align:center;color:white;">Book Request</h2><br>
-    </div>
+    <h2 style="text-align:center;color:white;">Fines Collection</h2>
 
     <?php
-       if(isset($_SESSION['login_username']))
-       {
-           $sql="SELECT student.username,rollno, books.bid,name,authors,edition,status,quantity FROM student  
-           INNER JOIN issue_book ON student.username=issue_book.username
-           INNER JOIN books ON issue_book.bid=books.bid WHERE issue_book.approve=''";
-           $res=mysqli_query($conn,$sql);
-           if(mysqli_num_rows($res)==0){
-               echo "<h2 style= color:white;font-size:20px;'>";
-            echo "There is no pending request.";
-            echo "</h2>";
-          }
-          else{
-            echo "<table class='table table-bordered table-hover' >";
-            echo "<tr style='background-color:#6db6b9e6'>";
-            echo "<th>"; echo "Student Username"; echo "</th>";
-            echo "<th>"; echo "RollNo"; echo "</th>";
-            echo "<th>"; echo "Book ID"; echo "</th>";
-            echo "<th>"; echo "Book Name"; echo "</th>";
-            echo "<th>"; echo "Authors"; echo "</th>";
-            echo "<th>"; echo "Edition"; echo "</th>";
-            echo "<th>"; echo "Status"; echo "</th>";
-            echo "<th>"; echo "Quantity"; echo "</th>";
-        
-            echo "</tr>";
-           while($row=mysqli_fetch_assoc($res)){
-            echo "<tr style='color:white;'>";
-            echo "<td>"; echo $row['username']; echo "</td>";
-            echo "<td>"; echo $row['rollno']; echo "</td>";
-            echo "<td>"; echo $row['bid']; echo "</td>";
-            echo "<td>"; echo $row['name']; echo "</td>";
-            echo "<td>"; echo $row['authors']; echo "</td>";
-            echo "<td>"; echo $row['edition']; echo "</td>";
-            echo "<td>"; echo $row['status']; echo "</td>";
-            echo "<td>"; echo $row['quantity']; echo "</td>";
-        
-            echo "</tr>";
-        
-           }
-        
-            echo "</table>";
+
+        if(isset($_SESSION['login_username']))
+        {
+          if(isset($_POST['submit']))
+          {
+            $search=$_POST['search'];
+            $query="SELECT * FROM `fines` WHERE `username` LIKE '$search%'";
+            $res=mysqli_query($conn,$query);
+            if(mysqli_num_rows($res)==0)
+            { 
+                echo "<h4 style='color:white;'>";
+              echo "Sorry no students found...Try something new";
+              echo "</h4>";
+            }
+            else{
+                echo "<table class='table table-bordered table-hover' style='width:99%;'>";
+                echo "<tr style='background-color:#6db6b9e6'>";
+                echo "<th>"; echo "Username"; echo "</th>";
+                echo "<th>"; echo "Book ID"; echo "</th>";
+                echo "<th>"; echo "Returned Date"; echo "</th>";
+                echo "<th>"; echo "Status"; echo "</th>";
+                echo "<th>"; echo "Days"; echo "</th>";
+                echo "<th>"; echo "Fine in Rs."; echo "</th>";
+              
+            
+                echo "</tr>";
+               while($row=mysqli_fetch_assoc($res)){
+                echo "<tr style='color:white;'>";
+                echo "<td>"; echo $row['username']; echo "</td>";
+                echo "<td>"; echo $row['bid']; echo "</td>";
+                echo "<td>"; echo $row['returned']; echo "</td>";
+                echo "<td>"; echo $row['status']; echo "</td>";
+                echo "<td>"; echo $row['day']; echo "</td>";
+                echo "<td>"; echo $row['fine']; echo "</td>";
+          
+            
+                echo "</tr>";
+            
+               }
+            
+                echo "</table>";
           }
         }
-    else{
-        ?>
-           <script type="text/javascript">
-                   alert("You must login first");
-           </script>
-        <?php
-    }
+          else{
+            $sql="SELECT * FROM `fines` ORDER BY `fines`.`returned` DESC";
+            $res=mysqli_query($conn,$sql);
 
-    if(isset($_POST['submit']))
-    {
-
-        $_SESSION['name']=$_POST['username'];
-        $_SESSION['bid']=$_POST['bid'];
-
-        $a="SELECT * FROM `issue_book` WHERE `username`='$_SESSION[name]' AND `bid`='$_SESSION[bid]'";
-        $r=mysqli_query($conn,$a);
-        $count=mysqli_num_rows($r);
-        if($count==0)
-        {
-          ?>
-          <script type="text/javascript">
-                alert("Please enter correct username and bid");
-          </script>
-      <?php 
-        }   
-        else {
-          ?>
-          <script type="text/javascript">
-                window.location="approve.php";
-          </script>
-      <?php
-      }
+            
+                echo "<table class='table table-bordered table-hover' style='width:99%;'>";
+                echo "<tr style='background-color:#6db6b9e6'>";
+                echo "<th>"; echo "Username"; echo "</th>";
+                echo "<th>"; echo "Book ID"; echo "</th>";
+                echo "<th>"; echo "Returned Date"; echo "</th>";
+                echo "<th>"; echo "Status"; echo "</th>";
+                echo "<th>"; echo "Days"; echo "</th>";
+                echo "<th>"; echo "Fine in Rs."; echo "</th>";
+              
+            
+                echo "</tr>";
+               while($row=mysqli_fetch_assoc($res)){
+                echo "<tr style='color:white;'>";
+                echo "<td>"; echo $row['username']; echo "</td>";
+                echo "<td>"; echo $row['bid']; echo "</td>";
+                echo "<td>"; echo $row['returned']; echo "</td>";
+                echo "<td>"; echo $row['status']; echo "</td>";
+                echo "<td>"; echo $row['day']; echo "</td>";
+                echo "<td>"; echo $row['fine']; echo "</td>";
+          
+            
+                echo "</tr>";
+            
+               }
+            
+                echo "</table>";
+               
+            }
         
-    }
-    ?>
-    
+      }   
 
-    </div>
-    </body>
-    </html>
+
+
+        
+    ?>
+
+ 
+</div>
+  </body>
+</html>

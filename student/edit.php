@@ -52,17 +52,18 @@ body{
 
 <?php
 $sql="SELECT * FROM student WHERE username='$_SESSION[login_username]'";
-$result=mysqli_query($conn,$sql) or die (mysql_error());
+$result=mysqli_query($conn,$sql);
 while($row=mysqli_fetch_assoc($result))
 {
-    $fname=$row['firstname'];
-    $lname=$row['lastname'];
-    $user=$row['username'];
-    $pass=$row['password'];
-    $roll=$row['rollno'];
-    $email=$row['email'];
-    $cont=$row['contact'];
-    $f=$row['pic'];
+ $fname=$row['firstname'];
+ $lname=$row['lastname'];
+ $username=$row['username'];
+ $pass=$row['password'];
+ $roll=$row['rollno'];
+ $email=$row['email'];
+ $cont=$row['contact'];
+ $f=$row['pic'];
+    
   
 }
 ?>
@@ -76,27 +77,27 @@ while($row=mysqli_fetch_assoc($result))
 <div class="edit__container">
   <form class="edit" name="edit" action="" method="post" enctype="multipart/form-data">
       <label>First Name:</label>
-      <input class="form-control" type="text" name="firstname" value="<?php echo $fname ?>">
+      <input class="form-control" type="text" name="firstname" value="<?php echo $fname; ?>">
 
       <label>Last Name:</label>
-      <input class="form-control" type="text" name="lastname" value="<?php echo $lname ?>">
+      <input class="form-control" type="text" name="lastname" value="<?php echo $lname; ?>">
 
       <label>Username:</label>
-      <input class="form-control" type="text" name="username" value="<?php echo $user ?>">
+      <input class="form-control" type="text" name="username" value="<?php echo $username; ?>">
 
       <label>Password:</label>
-      <input class="form-control" type="text" name="password" value="<?php echo $pass ?>">
+      <input class="form-control" type="text" name="password" value="<?php echo $pass; ?>">
 
       <label>RollNo:</label>
-      <input class="form-control" type="number" name="rollno" value="<?php echo $roll ?>">
+      <input class="form-control" type="number" name="rollno" value="<?php echo $roll; ?>">
 
       <label>Email:</label>
-      <input class="form-control" type="email" name="email" value="<?php echo $email ?>">
+      <input class="form-control" type="email" name="email" value="<?php echo $email; ?>">
 
       <label>Contact:</label>
-      <input class="form-control" type="number" name="contact" value="<?php echo $cont ?>"><br>
- 
-      <input class="form-control" type="file" name="file" value="<?php echo $f ?>"><br>
+      <input class="form-control" type="number" name="contact" value="<?php echo $cont; ?>"><br/>
+      <input class="form-control" type="file" name="file" value="<?php echo $f; ?>"><br>
+      
       <button class="btn btn-default" style="background-color:white;color:black;" type="submit" name="submit">Save</button>
 </form>
 
@@ -105,27 +106,31 @@ while($row=mysqli_fetch_assoc($result))
 <?php
 if(isset($_POST['submit'])){
     move_uploaded_file($_FILES['file']['tmp_name'],"images/".$_FILES['file']['name']);
-    $fname=$_POST['firstname'];
-    $lname=$_POST['lastname'];
-    $user=$_POST['username'];
-    $pass=$_POST['password'];
-    $roll=$_POST['rollno'];
-    $email=$_POST['email'];
-    $cont=$_POST['contact'];
-    $pic=$_FILES['file']['name'];
+$fname=$_POST['firstname'];
+$lname=$_POST['lastname'];
+$username=$_POST['username'];
+$pass=$_POST['password'];
+$roll=$_POST['rollno'];
+$email=$_POST['email'];
+$cont=$_POST['contact'];
+$pic=$_FILES['file']['name'];
 
-    $q="UPDATE `student` SET `firstname`='$fname',`lastname`='$lname',`username`='$user',`password`='$pass',
+
+    $q="UPDATE `student` SET `firstname`='$fname',`lastname`='$lname',`username`='$username',`password`='$pass',
     `rollno`='$roll',`email`='$email',`contact`='$cont',`pic`='$pic' WHERE `username`='".$_SESSION['login_username']."'";
     $res=mysqli_query($conn,$q);
-    if($res)
+    if($res)  
     {
         ?>
             <script type="text/javascript">
             alert("Saved Successfully");
-            window.location="profile.php";
+            window.location=".php";
             </script>
+            
         <?php
+
     }
+
 }
 
 ?>

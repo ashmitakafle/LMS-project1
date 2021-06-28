@@ -117,12 +117,12 @@ include "connection.php";
          <br>
         
          <div class="siden"><a href="profile.php">My Profile</a></div>
-         <div class="siden"><a href="student.php">Student Information</a></div>
         <div class="siden"><a href="addbook.php">Add Books</a></div>
         <div class="siden"><a href="deletebook.php">Delete Books</a></div>
         <div class="siden"><a href="bookrequest.php">Book Request</a></div>
         <div class="siden"><a href="issue.php">Issue Information</a></div>
         <div class="siden"><a href="expired.php">Expired List</a></div>
+        <div class="siden"><a href="fine.php">Fines</a></div>
          
          <?php
        
@@ -132,13 +132,12 @@ include "connection.php";
         ?>
         
       <div class="siden"><a href="profile.php">My Profile</a></div>
-      <div class="siden"><a href="student.php">Student Information</a></div>
      <div class="siden"><a href="addbook.php">Add Books</a></div>
      <div class="siden"><a href="deletebook.php">Delete Books</a></div>
      <div class="siden"><a href="bookrequest.php">Book Request</a></div>
      <div class="siden"><a href="issue.php">Issue Information</a></div>
      <div class="siden"><a href="expired.php">Expired List</a></div>
-    
+     <div class="siden"><a href="fine.php">Fines</a></div>
         <?php
       }
 
@@ -168,8 +167,8 @@ include "connection.php";
 
       <form class="approve__form" action="" method="post">
           <input class="form-control" type="text" name="approve" placeholder="Yes or NO" required><br>
-          <input class="form-control" type="text" name="issue" placeholder="Issue Date yyyy-mm-dd" required><br>
-          <input class="form-control" type="text" name="return" placeholder="Return Date yyyy-mm-dd" required><br>
+          <input class="form-control" type="text" name="issue" placeholder="Issue Date yyyy-mm-dd" ><br>
+          <input class="form-control" type="text" name="return" placeholder="Return Date yyyy-mm-dd" ><br>
           <button style="background-color:white;color:black;" class="btn btn-default" name="submit" type="submit">Submit</button>
       </form>
  </div>

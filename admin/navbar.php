@@ -45,7 +45,7 @@ include "connection.php";
           <ul>
          
           <li><a style="text-decoration:none;" href="">
-          <span style="margin-right:500px;">
+          <span style="margin-right:250px;">
           <?php
            echo "<img style='height:60px;width:60px;border-radius:50%;padding:5px;' src='images/".$_SESSION['image']."'>";
             echo $_SESSION['login_username'];
@@ -55,6 +55,7 @@ include "connection.php";
          
             <li><a style="text-decoration: none" href="index.php">HOME</a></li>
             <li><a style="text-decoration: none" href="books.php">BOOKS</a></li>
+            <li><a style="text-decoration: none" href="student.php">STUDENT-INFORMATION</a></li>
             <li><a style="text-decoration: none" href="logout.php">LOGOUT</a></li>
           
           
@@ -71,7 +72,7 @@ include "connection.php";
         <nav style="padding-top:3px;">
           <ul>
             <li><a style="text-decoration: none" href="index.php">HOME</a></li>
-            <li><a style="text-decoration: none" href="../books.php">BOOKS</a></li>
+            <li><a style="text-decoration: none" href="books.php">BOOKS</a></li>
             <li><a style="text-decoration: none" href="../login.php">LOGIN</a></li>
             <li>
               <a style="text-decoration: none" href="registration.php"
@@ -87,30 +88,7 @@ include "connection.php";
         }
       ?>
       </header>
-      
-      <?php
-          if(isset($_SESSION['login_username']))
-          {
-            $exp='<p style="background-color:red;color:yellow;">EXPIRED</p>';
-            $sql="SELECT `returns` FROM `issue_book` WHERE `username`='$_SESSION[login_username]' AND `approve`='$exp'";
-            $res=mysqli_query($conn,$sql);
-            
-            while($row=mysqli_fetch_assoc($res))
-            {
-              echo date("Y/m/d");
-                $d=strtotime($row['returns']);
-                $c=strtotime(date("Y-m-d"));
-                $diff=$c-$d;
-                if($diff>=0)
-                {
-                  $day=floor($diff/(60*60*24)); //Days
-                  $_SESSION['day']=$day;
-                }
 
-                
-                }
-          }
-      ?>
 
       </body>
       </html>
