@@ -167,8 +167,9 @@ include "connection.php";
 
       <form class="approve__form" action="" method="post">
           <input class="form-control" type="text" name="approve" placeholder="Yes or NO" required><br>
-          <input class="form-control" type="text" name="issue" placeholder="Issue Date yyyy-mm-dd" ><br>
-          <input class="form-control" type="text" name="return" placeholder="Return Date yyyy-mm-dd" ><br>
+          <input class="form-control" type="text" name="issue" placeholder="Issue Date yyyy-mm-dd" required><br>
+          <input class="form-control" type="text" name="return" placeholder="Return Date yyyy-mm-dd" required><br>
+          <input class="form-control" type="text" name="time" placeholder="Return Date   Sep 19, 2021 15:00:00" required  ><br>
           <button style="background-color:white;color:black;" class="btn btn-default" name="submit" type="submit">Submit</button>
       </form>
  </div>
@@ -176,6 +177,8 @@ include "connection.php";
     <?php
         if(isset($_POST['submit']))
         {
+          $abc="INSERT INTO `timer`(`name`, `bid`, `tm`) VALUES ('$_SESSION[name]','$_SESSION[bid]','$_POST[time]')";
+          $sq=mysqli_query($conn,$abc);
             $approve=$_POST['approve'];
             $issue=$_POST['issue'];
             $return=$_POST['return'];
@@ -192,8 +195,9 @@ include "connection.php";
             {
                 if($row['quantity']==0)
                 {
-                    $query="UPDATE `books` SET `status`='Not-Available' WHERE `bid`='$_SESSION[bid]'";
+                    $query="UPDATE `books` SET `status`='Not-Available'  WHERE `bid`='$_SESSION[bid]'";
                     $result=mysqli_query($conn,$query);
+
                 }
             }
             ?>

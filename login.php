@@ -81,7 +81,7 @@ include "connection.php";
               $pass=$_POST['Password'];
  
               $count=0;
-              $sql="SELECT * FROM `admin` WHERE `username`='$username' AND `password`='$pass'";
+              $sql="SELECT * FROM `admin` WHERE `username`='$username' AND `password`='$pass' AND `status`='yes'";
               $res=mysqli_query($conn,$sql);
               $row=mysqli_fetch_assoc($res);
               $count=mysqli_num_rows($res);
@@ -89,7 +89,7 @@ include "connection.php";
               if($count==0){    
                 ?>
                 <script type="text/javascript">
-                alert("Username and password doesnot match");
+                alert("Username or password doesnot match");
                 </script>
  
                 <?php

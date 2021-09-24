@@ -30,7 +30,7 @@ include "connection.php";
           <h1
             style="
               color: white;
-              font-size: 25px;
+              font-size: 15px;
               margin-top: 3px;
               line-height: 60px;
             "
@@ -40,10 +40,68 @@ include "connection.php";
         </div>
         <?php
         if(isset($_SESSION['login_username'])){
-          ?>
-         <nav style="padding-top:3px;">
-          <ul>
+          //----------------------------TIMER-------------------------------------//
+          $ap="SELECT * FROM `issue_book` WHERE `username`='$_SESSION[login_username]' AND `approve`='Yes' ORDER BY `returns` ASC LIMIT 1";
+          $query=mysqli_query($conn,$ap);
+         $var4= mysqli_num_rows($query);
+         if($var4==1)
+         {
+          $row=mysqli_fetch_assoc($query);
+          $t="SELECT * FROM `timer` WHERE `name`='$_SESSION[login_username]' AND `bid`='$row[bid]'";
+          $result=mysqli_query($conn,$t);
+          $r=mysqli_fetch_assoc($result);
+          
+          
+          
          
+
+      
+
+          ?>
+
+          <!--------------------------------------------------TIMER----------------------------------------------------------->
+                          <script>
+                        // Set the date we're counting down to
+                        var countDownDate = new Date("<?php  echo $r['tm'];?>").getTime();
+
+                        // Update the count down every 1 second
+                        var x = setInterval(function() {
+
+                          // Get today's date and time
+                          var now = new Date().getTime();
+
+                          // Find the distance between now and the count down date
+                          var distance = countDownDate - now;
+
+                          // Time calculations for days, hours, minutes and seconds
+                          var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                          var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                          var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                          var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                          // Display the result in the element with id="demo"
+                          document.getElementById("demo").innerHTML = days + "d" + hours + "h"
+                          + minutes + "m" + seconds + "s ";
+
+                          // If the count down is finished, write some text
+                          if (distance < 0) {
+                            clearInterval(x);
+                            document.getElementById("demo").innerHTML = "EXPIRED";
+                          }
+                        }, 1000);
+                        </script>
+
+
+          <!---------------------------------------------------------------------------------------------------------------------->
+<?php
+          }
+          ?>
+
+
+         <nav style="padding-top:3px;">
+         
+          <ul>
+          
           <li><a style="text-decoration:none;" href="">
           <span style="margin-right:500px;">
           <?php
@@ -52,6 +110,9 @@ include "connection.php";
           ?>
            </span>
           </a></li>
+
+          <li><p style="color:#ff1503; " id="demo"> </p></li>
+          
          
             <li><a style="text-decoration: none" href="index.php">HOME</a></li>
             <li><a style="text-decoration: none" href="books.php">BOOKS</a></li>
@@ -60,7 +121,9 @@ include "connection.php";
             <li>
               <a style="text-decoration: none" href="feedback.php">FEEDBACK</a>
             </li>
+            
           </ul>
+          
         </nav>
 
           <?php   
@@ -91,6 +154,7 @@ include "connection.php";
         <?php
      if(isset($_SESSION['login_username']))
      {
+
       $day=0;
       $expired='<p style="background-color:red;color:yellow;">EXPIRED</p>';
       $sql="SELECT `returns` FROM `issue_book` WHERE `username`='$_SESSION[login_username]' AND `approve`='$expired'";

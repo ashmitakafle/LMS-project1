@@ -215,8 +215,8 @@ include "connection.php";
               $fine=$day*5;
             }
             $x=date("Y-m-d");
-            $r="INSERT INTO `fines`(`username`, `bid`, `returned`, `status`, `day`, `fine`)
-             VALUES ('$username','$bid','$x','paid','$day','$fine')";
+            $r="INSERT INTO `fines`(`username`, `bid`, `returned`,`status`, `day`, `fine`)
+             VALUES ('$username','$bid','$x','not paid','$day','$fine')";
             $l=mysqli_query($conn,$r);
 
           }

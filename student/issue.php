@@ -161,7 +161,7 @@ include "connection.php";
     </script>
 
            <div class="issue__container">
-           <h2 style="text-align: center; color:white;">Information of Borrowed Books</h2>
+           <h2 style="text-align: center; color:white; margin-top:150px;">Information of Borrowed Books</h2>
 
            <?php
            $c=0;

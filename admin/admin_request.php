@@ -5,7 +5,7 @@ include "connection.php";
 <!DOCTYPE html>
 <html>
   <head>  
-    <title>Books</title>
+    <title>Approve Request</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -14,6 +14,8 @@ include "connection.php";
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -169,7 +171,7 @@ include "connection.php";
         </button>
     </form>
     </div>
-    <h2 style="text-align:center;color:white;">List of Students</h2>
+    <h2 style="text-align:center;color:white;">New Request</h2>
 
     <?php
 
@@ -178,33 +180,32 @@ include "connection.php";
           if(isset($_POST['submit']))
           {
             $search=$_POST['search'];
-            $query="SELECT * FROM `student` WHERE `username` LIKE '$search%'";
-            $res=mysqli_query($conn,$query);
-            if(mysqli_num_rows($res)==0)
+            $query1="SELECT * FROM `admin` WHERE `username` LIKE '$search' AND `status`=''";
+            $res1=mysqli_query($conn,$query1);
+            if(mysqli_num_rows($res1)==0)
             {
-              ?>
-              <p style="color:white;">Sorry no student found..... Try something new</p>
-          <?php
+            ?>
+                <p style="color:white;">Sorry no username found..... Try something new</p>
+            <?php
             }
             else{
-              echo "<table class='table table-bordered table-hover'>";
+              echo "<table class='table table-bordered'>";
               echo "<tr style='background-color:#6db6b9e6'>";
               echo "<th>"; echo "ID"; echo "</th>";
               echo "<th>"; echo "First Name"; echo "</th>";
               echo "<th>"; echo "Last Name"; echo "</th>";
               echo "<th>"; echo "Username"; echo "</th>";
-              echo "<th>"; echo "RollNo"; echo "</th>";
               echo "<th>"; echo "Email"; echo "</th>";
               echo "<th>"; echo "Contact"; echo "</th>";
           
               echo "</tr>";
-             while($row=mysqli_fetch_assoc($res)){
+             while($row=mysqli_fetch_assoc($res1)){
+                 $_SESSION['approve']=$row['username'];
               echo "<tr style='color:white;'>";
               echo "<td>"; echo $row['id']; echo "</td>";
               echo "<td>"; echo $row['firstname']; echo "</td>";
               echo "<td>"; echo $row['lastname']; echo "</td>";
               echo "<td>"; echo $row['username']; echo "</td>";
-              echo "<td>"; echo $row['rollno']; echo "</td>";
               echo "<td>"; echo $row['email']; echo "</td>";
               echo "<td>"; echo $row['contact']; echo "</td>";
           
@@ -213,31 +214,37 @@ include "connection.php";
              }
           
               echo "</table>";
+              ?>
+              <form action=" " method="post">
+             <button class="btn btn-default" type="submit" name="submit2" style="color:red;"> <span class="glyphicon glyphicon-remove" style="font-size:15px;color:red;"></span>&nbsp; Remove</button> 
+             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+             <button class="btn btn-default" type="submit" name="submit3" style="color:green;"> <span class="glyphicon glyphicon-ok" style="font-size:15px;color:green;"></span>&nbsp; Approve</button>
+              </form> 
+          <?php
+ 
             }
           }
           else{
-            $sql="SELECT * FROM `student`";
-            $res=mysqli_query($conn,$sql);
+            $sql3="SELECT * FROM `admin` WHERE `status`=' '";
+            $res3=mysqli_query($conn,$sql3);
 
             
-                echo "<table class='table table-bordered table-hover' style='width:99%;'>";
+                echo "<table class='table table-bordered ' style='width:99%;'>";
                 echo "<tr style='background-color:#6db6b9e6'>";
                 echo "<th>"; echo "ID"; echo "</th>";
                 echo "<th>"; echo "First Name"; echo "</th>";
                 echo "<th>"; echo "Last Name"; echo "</th>";
                 echo "<th>"; echo "Username"; echo "</th>";
-                echo "<th>"; echo "RollNo"; echo "</th>";
                 echo "<th>"; echo "Email"; echo "</th>";
                 echo "<th>"; echo "Contact"; echo "</th>";
             
                 echo "</tr>";
-               while($row=mysqli_fetch_assoc($res)){
+               while($row=mysqli_fetch_assoc($res3)){
                 echo "<tr style='color:white;'>";
                 echo "<td>"; echo $row['id']; echo "</td>";
                 echo "<td>"; echo $row['firstname']; echo "</td>";
                 echo "<td>"; echo $row['lastname']; echo "</td>";
                 echo "<td>"; echo $row['username']; echo "</td>";
-                echo "<td>"; echo $row['rollno']; echo "</td>";
                 echo "<td>"; echo $row['email']; echo "</td>";
                 echo "<td>"; echo $row['contact']; echo "</td>";
             
@@ -246,18 +253,21 @@ include "connection.php";
                }
             
                 echo "</table>";
-               
+                if(isset($_POST['submit2'])){
+                    mysqli_query($conn, "DELETE FROM `admin` WHERE `username`='$_SESSION[approve]' AND `status`=' ';");
+                    unset($_SESSION['approve']);
+                  }
+        
+                 if(isset($_POST['submit3'])){
+                     mysqli_query($conn, "UPDATE `admin` SET `status`='yes' WHERE `username`='$_SESSION[approve]';");
+                     unset($_SESSION['approve']);
+                      
+                  } 
+ 
 
         }
       }
-      else{
-        ?>
-           <script>
-            alert("Please login first");
-            window.location="books.php";
-           </script>
-        <?php
-    }
+
 
 
         

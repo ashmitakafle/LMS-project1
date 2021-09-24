@@ -5,7 +5,7 @@ include "connection.php";
 <!DOCTYPE html>
 <html>
   <head>  
-    <title>Student Login</title>
+    <title>Books</title>
     <link rel="stylesheet" type="text/css" href="style.css" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -22,20 +22,16 @@ include "connection.php";
     <style>
       body {
         font-family: "Lato", sans-serif;
+        background-color:#0d2628; 
+        height:1200px;
+  
       }
 
-      .books__search{
-        
-        margin-left:1160px;
-        text-align:center;
-      }
-      .books__request{
-        margin-left:1200px;
-        text-align:center;
-      }
+
       .name{
         color:white;
         margin-left:20px;
+       
       }
       .siden{
         font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;  
@@ -46,6 +42,9 @@ include "connection.php";
         background-color:#088b34;
       }
 
+      .student__container{
+        margin-left:1200px;
+      }
       .sidenav {
         height: 100%;
         width: 0;
@@ -116,11 +115,12 @@ include "connection.php";
          <br>
         
          <div class="siden"><a href="profile.php">My Profile</a></div>
-         <div class="siden"><a href="books.php">Books</a></div>
-         <div class="siden"><a href="bookrequest.php">Book Request</a></div>
-         <div class="siden"><a href="issue.php">Issue Information</a></div>
-         <div class="siden"><a href="expired.php">Expired List</a></div>
-         <div class="siden"><a href="fine.php">Fines</a></div>
+        <div class="siden"><a href="addbook.php">Add Books</a></div>
+        <div class="siden"><a href="deletebook.php">Delete Books</a></div>
+        <div class="siden"><a href="bookrequest.php">Book Request</a></div>
+        <div class="siden"><a href="issue.php">Issue Information</a></div>
+        <div class="siden"><a href="expired.php">Expired List</a></div>
+        <div class="siden"><a href="fine.php">Fines</a></div>
          
          <?php
        
@@ -130,7 +130,8 @@ include "connection.php";
         ?>
         
       <div class="siden"><a href="profile.php">My Profile</a></div>
-     <div class="siden"><a href="books.php">Books</a></div>
+     <div class="siden"><a href="addbook.php">Add Books</a></div>
+     <div class="siden"><a href="deletebook.php">Delete Books</a></div>
      <div class="siden"><a href="bookrequest.php">Book Request</a></div>
      <div class="siden"><a href="issue.php">Issue Information</a></div>
      <div class="siden"><a href="expired.php">Expired List</a></div>
@@ -143,7 +144,7 @@ include "connection.php";
     </div>
 
     <div id="main">
-      <span style="font-size: 30px; cursor: pointer" onclick="openNav()"
+      <span style="font-size: 30px; cursor: pointer;color:white;" onclick="openNav()"
         >&#9776;
       </span>
     
@@ -160,73 +161,56 @@ include "connection.php";
       }
     </script>
 
-<?php
+    <h2 style="text-align:center;color:white;margin-top:150px;">Fines Collection</h2>
 
-         $sql="SELECT * FROM `issue_book` WHERE `username`='$_SESSION[login_username]' AND `approve`=''";
-         $res=mysqli_query($conn,$sql);
-         if(mysqli_num_rows($res)==0){
-           echo "There is no pending request";
-         }
+    <?php
 
-         else{
-           ?>
-               <form action="" method="POST">
-           <?php
-          echo "<table class='table table-bordered table-hover'>";
-          echo "<tr style='background-color:#6db6b9e6'>";
-          echo "<th>"; echo "Select"; echo "</th>";
-          echo "<th>"; echo "Book ID"; echo "</th>";
-          echo "<th>"; echo "Approve Status"; echo "</th>";
-          echo "<th>"; echo "Issue Date"; echo "</th>";
-          echo "<th>"; echo "Return Date"; echo "</th>";
+        if($_SESSION['login_username'])
+        {
+        
+            $sql="SELECT * FROM `fines` ORDER BY `fines`.`returned` DESC";
+            $res=mysqli_query($conn,$sql);
 
-      
-          echo "</tr>";
-          $i=0;
-         while($row=mysqli_fetch_assoc($res)){
-          echo "<tr>";
-          ?>
-         
-         <td><input type="checkbox" name="check[]" value="<?php echo $row["bid"]; ?>"></td>
-          <?php
-          echo "<td>"; echo $row['bid']; echo "</td>";
-          echo "<td>"; echo $row['approve']; echo "</td>";
-          echo "<td>"; echo $row['issue']; echo "</td>";
-          echo "<td>"; echo $row['returns']; echo "</td>";
-
-      
-          echo "</tr>";
-      $i++;
-         }
-      
-          echo "</table>";
-
-          ?>
-          <br>
+            
+                echo "<table class='table table-bordered table-hover' style='width:99%;'>";
+                echo "<tr style='background-color:#6db6b9e6'>";
+                echo "<th>"; echo "Username"; echo "</th>";
+                echo "<th>"; echo "Book ID"; echo "</th>";
+                echo "<th>"; echo "Returned Date"; echo "</th>";
+                echo "<th>"; echo "Expired Date"; echo "</th>";
+                echo "<th>"; echo "Status"; echo "</th>";
+                echo "<th>"; echo "Days"; echo "</th>";
+                echo "<th>"; echo "Fine in Rs."; echo "</th>";
+              
+            
+                echo "</tr>";
+               while($row=mysqli_fetch_assoc($res)){
+                echo "<tr style='color:white;'>";
+                echo "<td>"; echo $row['username']; echo "</td>";
+                echo "<td>"; echo $row['bid']; echo "</td>";
+                echo "<td>"; echo $row['returned']; echo "</td>";
+                echo "<td>"; echo $row['expired']; echo "</td>";
+                echo "<td>"; echo $row['status']; echo "</td>";
+                echo "<td>"; echo $row['day']; echo "</td>";
+                echo "<td>"; echo $row['fine']; echo "</td>";
           
-           <button type="submit" name="delete" class="btn btn-success" onclick="location.reload()">Delete</button>
-               </form>
-          <?php
-         }
-
-?>
-    </div>
-
-<?php
-         if(isset($_POST['delete'])){
-          if(isset($_POST['check'])){
-          
-          	$checkbox = $_POST['check'];
-	          for($i=0;$i<count($checkbox);$i++){
-	          $del_id = $checkbox[$i];
-             
-              mysqli_query($conn, "DELETE FROM `issue_book` WHERE `bid`='$del_id' AND `username`='$_SESSION[login_username]' 
-              ORDER BY `bid` ASC LIMIT 1;");
-
+            
+                echo "</tr>";
+            
+               }
+            
+                echo "</table>";
+               
             }
-          }
-        }
-?>
+        
+      
+
+
+
+        
+    ?>
+
+ 
 </div>
   </body>
 </html>

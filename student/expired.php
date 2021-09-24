@@ -187,7 +187,7 @@ include "connection.php";
            </form>
            </div>
               
-              <div style="margin-left:1350px;">
+              <div style="margin-left:1300px; margin-top:0px;">
               <h5 style="color: white;">
               Your fine is:
               <?php

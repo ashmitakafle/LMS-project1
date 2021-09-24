@@ -161,8 +161,26 @@ include "connection.php";
       }
     </script>
 
+
+
+
     <div class="books__search">
-      <form class="search" action="" method="post" name="form">
+      <form class="navbar-form" action="" method="post" name="form">
+      <label for="department"><b>Choose a department:</b></label>
+        <select name="department">
+          <optgroup label="Engineering">
+            <option>BE_IT</option>
+            <option>BE_CMP</option>
+            <option>BE_ELX</option>
+            <option>BE_Civil</option>
+
+          </optgroup>
+          <optgroup label="Management">
+            <option>BBS</option>
+            <option>BBA</option>
+            </optgroup>
+        </select>
+        <br>
         <input style="height:40px;width:200px"  type="text" name="search" type="search" placeholder="Search books...." required></input>
         <button style="height:40px; width:40px;background-color:#6db6b9e6;" class="btn btn-default" name="submit" type="submit">
         <i class="fas fa-search" style="color:white;"></i>
@@ -172,6 +190,7 @@ include "connection.php";
 <br>
     <div class="books__request">
       <form class="request" action="" method="post" name="form1">
+
         <input style="height:40px;width:200px"  type="text" name="bid" type="search" placeholder="Book ID" required></input>
         <button style="height:40px; width:80px;background-color:#6db6b9e6;" class="btn btn-default" name="submit1" type="submit1">
         Request
@@ -187,7 +206,8 @@ include "connection.php";
     <?php
        if(isset($_POST['submit']))
        {
-         $q="SELECT * FROM `books` WHERE `name` like '%$_POST[search]%'";
+        
+         $q="SELECT * FROM `books` WHERE `name` like '%$_POST[search]%' AND `department`='$_POST[department]'";
          $qu=mysqli_query($conn,$q);
          if(mysqli_num_rows($qu)==0){
            echo "Sorry no books found...Try something new.";
@@ -261,16 +281,30 @@ else{
   if(isset($_POST['submit1'])){
     $bid=$_POST['bid'];
     if(isset($_SESSION['login_username'])){
+     $s="SELECT * FROM `books` WHERE `bid`='$_POST[bid]'";
+     $sql1=mysqli_query($conn,$s);
+      $row1=mysqli_fetch_assoc($sql1);
+      $count1=mysqli_num_rows($sql1);
+      if($count1!=0) {
       $a="INSERT INTO `issue_book`(`username`, `bid`, `approve`, `issue`, `returns`)
        VALUES ('$_SESSION[login_username]','$bid','','','')";
       $b=mysqli_query($conn,$a);
       ?>
       <script type="text/javascript">
      
-      window.location="bookrequest.php";
+      window.location="books.php";
       </script>
 
       <?php
+      }
+           else{
+            ?>
+            <script type="text/javascript">
+            alert("This book is not available in the library...Try something new.")
+            </script>
+      
+            <?php
+           }
     }
 
     else{

@@ -79,7 +79,7 @@ include "connection.php";
              if($count==0){
                ?>
                <script type="text/javascript">
-               alert("Username and password doesnot match");
+               alert("Username or password doesnot match");
                </script>
 
                <?php

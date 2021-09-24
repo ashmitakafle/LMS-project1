@@ -113,7 +113,7 @@ include "connection.php";
              
          if($count==0){  
           $sql="INSERT INTO `admin`(`id`, `firstname`, `lastname`, `username`, `password`, `email`, `contact`, `pic`) 
-          VALUES ('','$fname','$lname','$user','$pass','$email','$cont','$img')";
+          VALUES ('','$fname','$lname','$user','$pass','$email','$cont','$img',' ')";
           $result=mysqli_query($conn,$sql);
 
 
